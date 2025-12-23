@@ -238,6 +238,35 @@ def _apply_visibility_if_valid(
         )
 
 
+def _apply_color_id_if_valid(
+    event_body: Dict[str, Any],
+    color_id: Optional[str],
+    function_name: str,
+) -> None:
+    """
+    Apply color ID to the event body if the provided value is valid.
+
+    Args:
+        event_body: Event payload being constructed.
+        color_id: Provided color ID value.
+        function_name: Name of the calling function for logging context.
+    """
+    if color_id is None:
+        return
+
+    # Convert to string and validate
+    color_id_str = str(color_id)
+    # Google Calendar supports color IDs from "1" to "11"
+    valid_color_ids = [str(i) for i in range(1, 12)]
+    if color_id_str in valid_color_ids:
+        event_body["colorId"] = color_id_str
+        logger.info(f"[{function_name}] Set event color to colorId '{color_id_str}'")
+    else:
+        logger.warning(
+            f"[{function_name}] Invalid colorId '{color_id_str}', must be a string from '1' to '11', skipping"
+        )
+
+
 def _preserve_existing_fields(
     event_body: Dict[str, Any],
     existing_event: Dict[str, Any],
@@ -705,9 +734,9 @@ async def create_event(
             logger.info(
                 f"[create_event] Added {len(parsed_attendees)} attendees to event"
             )
-    if color_id is not None:
-        event_body["colorId"] = str(color_id)
-        logger.info(f"[create_event] Set event color to colorId '{color_id}'")
+
+    # Handle color ID validation
+    _apply_color_id_if_valid(event_body, color_id, "create_event")
 
     # Handle reminders
     if reminders is not None or not use_default_reminders:
@@ -928,9 +957,9 @@ async def modify_event(
             logger.info(
                 f"[modify_event] Updating event with {len(parsed_attendees)} attendees"
             )
-    if color_id is not None:
-        event_body["colorId"] = str(color_id)
-        logger.info(f"[modify_event] Set event color to colorId '{color_id}'")
+
+    # Handle color ID validation
+    _apply_color_id_if_valid(event_body, color_id, "modify_event")
 
     # Handle reminders
     if reminders is not None or use_default_reminders is not None:
