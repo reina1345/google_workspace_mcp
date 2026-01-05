@@ -484,12 +484,17 @@ def handle_auth_callback(
         logger.info("Successfully exchanged authorization code for tokens.")
 
         # Get user info to determine user_id (using email here)
-        user_info = get_user_info(credentials)
-        if not user_info or "email" not in user_info:
-            logger.error("Could not retrieve user email from Google.")
-            raise ValueError("Failed to get user email for identification.")
-
-        user_google_email = user_info["email"]
+        # In single-user mode, skip userinfo API call and use a placeholder email
+        if os.getenv("MCP_SINGLE_USER_MODE") == "1":
+            # Single-user mode: use email from state if available, otherwise use placeholder
+            user_google_email = "single-user@localhost"
+            logger.info(f"[single-user] Skipping userinfo API call, using placeholder: {user_google_email}")
+        else:
+            user_info = get_user_info(credentials)
+            if not user_info or "email" not in user_info:
+                logger.error("Could not retrieve user email from Google.")
+                raise ValueError("Failed to get user email for identification.")
+            user_google_email = user_info["email"]
         logger.info(f"Identified user_google_email: {user_google_email}")
 
         # Save the credentials

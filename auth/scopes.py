@@ -64,8 +64,8 @@ TASKS_READONLY_SCOPE = "https://www.googleapis.com/auth/tasks.readonly"
 # Google Custom Search API scope
 CUSTOM_SEARCH_SCOPE = "https://www.googleapis.com/auth/cse"
 
-# Base OAuth scopes required for user identification
-BASE_SCOPES = [USERINFO_EMAIL_SCOPE, USERINFO_PROFILE_SCOPE, OPENID_SCOPE]
+# Base OAuth scopes required for authentication (minimal)
+BASE_SCOPES = [OPENID_SCOPE]
 
 # Service-specific scope groups
 DOCS_SCOPES = [DOCS_READONLY_SCOPE, DOCS_WRITE_SCOPE]
