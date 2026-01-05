@@ -42,7 +42,7 @@ def create_comment_tools(app_name: str, file_id_param: str):
         async def read_comments(
             service, user_google_email: str, document_id: str
         ) -> str:
-            """Read all comments from a Google Document."""
+            """Googleドキュメントからすべてのコメントを読み取ります。"""
             return await _read_comments_impl(service, app_name, document_id)
 
         @require_google_service("drive", "drive_file")
@@ -50,7 +50,7 @@ def create_comment_tools(app_name: str, file_id_param: str):
         async def create_comment(
             service, user_google_email: str, document_id: str, comment_content: str
         ) -> str:
-            """Create a new comment on a Google Document."""
+            """Googleドキュメントに新しいコメントを作成します。"""
             return await _create_comment_impl(
                 service, app_name, document_id, comment_content
             )
@@ -64,7 +64,7 @@ def create_comment_tools(app_name: str, file_id_param: str):
             comment_id: str,
             reply_content: str,
         ) -> str:
-            """Reply to a specific comment in a Google Document."""
+            """Googleドキュメント内の特定のコメントに返信します。"""
             return await _reply_to_comment_impl(
                 service, app_name, document_id, comment_id, reply_content
             )
@@ -74,7 +74,7 @@ def create_comment_tools(app_name: str, file_id_param: str):
         async def resolve_comment(
             service, user_google_email: str, document_id: str, comment_id: str
         ) -> str:
-            """Resolve a comment in a Google Document."""
+            """Googleドキュメント内のコメントを解決します。"""
             return await _resolve_comment_impl(
                 service, app_name, document_id, comment_id
             )
@@ -86,7 +86,7 @@ def create_comment_tools(app_name: str, file_id_param: str):
         async def read_comments(
             service, user_google_email: str, spreadsheet_id: str
         ) -> str:
-            """Read all comments from a Google Spreadsheet."""
+            """Googleスプレッドシートからすべてのコメントを読み取ります。"""
             return await _read_comments_impl(service, app_name, spreadsheet_id)
 
         @require_google_service("drive", "drive_file")
@@ -94,7 +94,7 @@ def create_comment_tools(app_name: str, file_id_param: str):
         async def create_comment(
             service, user_google_email: str, spreadsheet_id: str, comment_content: str
         ) -> str:
-            """Create a new comment on a Google Spreadsheet."""
+            """Googleスプレッドシートに新しいコメントを作成します。"""
             return await _create_comment_impl(
                 service, app_name, spreadsheet_id, comment_content
             )
@@ -108,7 +108,7 @@ def create_comment_tools(app_name: str, file_id_param: str):
             comment_id: str,
             reply_content: str,
         ) -> str:
-            """Reply to a specific comment in a Google Spreadsheet."""
+            """Googleスプレッドシート内の特定のコメントに返信します。"""
             return await _reply_to_comment_impl(
                 service, app_name, spreadsheet_id, comment_id, reply_content
             )
@@ -118,7 +118,7 @@ def create_comment_tools(app_name: str, file_id_param: str):
         async def resolve_comment(
             service, user_google_email: str, spreadsheet_id: str, comment_id: str
         ) -> str:
-            """Resolve a comment in a Google Spreadsheet."""
+            """Googleスプレッドシート内のコメントを解決します。"""
             return await _resolve_comment_impl(
                 service, app_name, spreadsheet_id, comment_id
             )
@@ -130,7 +130,7 @@ def create_comment_tools(app_name: str, file_id_param: str):
         async def read_comments(
             service, user_google_email: str, presentation_id: str
         ) -> str:
-            """Read all comments from a Google Presentation."""
+            """Googleスライドからすべてのコメントを読み取ります。"""
             return await _read_comments_impl(service, app_name, presentation_id)
 
         @require_google_service("drive", "drive_file")
@@ -138,7 +138,7 @@ def create_comment_tools(app_name: str, file_id_param: str):
         async def create_comment(
             service, user_google_email: str, presentation_id: str, comment_content: str
         ) -> str:
-            """Create a new comment on a Google Presentation."""
+            """Googleスライドに新しいコメントを作成します。"""
             return await _create_comment_impl(
                 service, app_name, presentation_id, comment_content
             )
@@ -152,7 +152,7 @@ def create_comment_tools(app_name: str, file_id_param: str):
             comment_id: str,
             reply_content: str,
         ) -> str:
-            """Reply to a specific comment in a Google Presentation."""
+            """Googleスライド内の特定のコメントに返信します。"""
             return await _reply_to_comment_impl(
                 service, app_name, presentation_id, comment_id, reply_content
             )
@@ -162,7 +162,7 @@ def create_comment_tools(app_name: str, file_id_param: str):
         async def resolve_comment(
             service, user_google_email: str, presentation_id: str, comment_id: str
         ) -> str:
-            """Resolve a comment in a Google Presentation."""
+            """Googleスライド内のコメントを解決します。"""
             return await _resolve_comment_impl(
                 service, app_name, presentation_id, comment_id
             )

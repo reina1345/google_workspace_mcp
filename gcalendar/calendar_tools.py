@@ -306,13 +306,13 @@ def _correct_time_format_for_api(
 @require_google_service("calendar", "calendar_read")
 async def list_calendars(service, user_google_email: str) -> str:
     """
-    Retrieves a list of calendars accessible to the authenticated user.
+    認証されたユーザーがアクセスできるカレンダーのリストを取得します。
 
     Args:
-        user_google_email (str): The user's Google email address. Required.
+        user_google_email (str): ユーザーのGoogleメールアドレス。必須。
 
     Returns:
-        str: A formatted list of the user's calendars (summary, ID, primary status).
+        str: ユーザーのカレンダーのフォーマット済みリスト（概要、ID、プライマリステータス）。
     """
     logger.info(f"[list_calendars] Invoked. Email: '{user_google_email}'")
 
@@ -351,22 +351,22 @@ async def get_events(
     include_attachments: bool = False,
 ) -> str:
     """
-    Retrieves events from a specified Google Calendar. Can retrieve a single event by ID or multiple events within a time range.
-    You can also search for events by keyword by supplying the optional "query" param.
+    指定されたGoogleカレンダーからイベントを取得します。IDによる単一イベントの取得、または期間指定による複数イベントの取得が可能です。
+    オプションの「query」パラメータを指定して、キーワードでイベントを検索することもできます。
 
     Args:
-        user_google_email (str): The user's Google email address. Required.
-        calendar_id (str): The ID of the calendar to query. Use 'primary' for the user's primary calendar. Defaults to 'primary'. Calendar IDs can be obtained using `list_calendars`.
-        event_id (Optional[str]): The ID of a specific event to retrieve. If provided, retrieves only this event and ignores time filtering parameters.
-        time_min (Optional[str]): The start of the time range (inclusive) in RFC3339 format (e.g., '2024-05-12T10:00:00Z' or '2024-05-12'). If omitted, defaults to the current time. Ignored if event_id is provided.
-        time_max (Optional[str]): The end of the time range (exclusive) in RFC3339 format. If omitted, events starting from `time_min` onwards are considered (up to `max_results`). Ignored if event_id is provided.
-        max_results (int): The maximum number of events to return. Defaults to 25. Ignored if event_id is provided.
-        query (Optional[str]): A keyword to search for within event fields (summary, description, location). Ignored if event_id is provided.
-        detailed (bool): Whether to return detailed event information including description, location, attendees, and attendee details (response status, organizer, optional flags). Defaults to False.
-        include_attachments (bool): Whether to include attachment information in detailed event output. When True, shows attachment details (fileId, fileUrl, mimeType, title) for events that have attachments. Only applies when detailed=True. Set this to True when you need to view or access files that have been attached to calendar events, such as meeting documents, presentations, or other shared files. Defaults to False.
+        user_google_email (str): ユーザーのGoogleメールアドレス。必須。
+        calendar_id (str): クエリ対象のカレンダーID。ユーザーのプライマリカレンダーには 'primary' を使用します。デフォルトは 'primary' です。カレンダーIDは `list_calendars` を使用して取得できます。
+        event_id (Optional[str]): 取得する特定のイベントのID。指定された場合、このイベントのみを取得し、時間フィルタリングパラメータは無視されます。
+        time_min (Optional[str]): 期間の開始日時（これを含む）をRFC3339形式で指定します（例: '2024-05-12T10:00:00Z' または '2024-05-12'）。省略した場合、現在時刻がデフォルトとなります。event_idが指定されている場合は無視されます。
+        time_max (Optional[str]): 期間の終了日時（これを含まない）をRFC3339形式で指定します。省略した場合、`time_min` 以降のイベントが対象となります（`max_results` まで）。event_idが指定されている場合は無視されます。
+        max_results (int): 返されるイベントの最大数。デフォルトは25です。event_idが指定されている場合は無視されます。
+        query (Optional[str]): イベントフィールド（概要、説明、場所）内で検索するキーワード。event_idが指定されている場合は無視されます。
+        detailed (bool): 説明、場所、参加者、参加者詳細（回答ステータス、主催者、オプションフラグ）を含む詳細なイベント情報を返すかどうか。デフォルトはFalseです。
+        include_attachments (bool): 詳細なイベント出力に添付ファイル情報を含めるかどうか。Trueの場合、添付ファイルがあるイベントの添付ファイル詳細（fileId, fileUrl, mimeType, title）を表示します。detailed=Trueの場合のみ適用されます。会議資料、プレゼンテーション、その他の共有ファイルなど、カレンダーイベントに添付されたファイルを表示またはアクセスする必要がある場合にTrueに設定してください。デフォルトはFalseです。
 
     Returns:
-        str: A formatted list of events (summary, start and end times, link) within the specified range, or detailed information for a single event if event_id is provided.
+        str: 指定された範囲内のフォーマットされたイベントのリスト（概要、開始・終了時刻、リンク）、またはevent_idが指定された場合は単一イベントの詳細情報。
     """
     logger.info(
         f"[get_events] Raw parameters - event_id: '{event_id}', time_min: '{time_min}', time_max: '{time_max}', query: '{query}', detailed: {detailed}, include_attachments: {include_attachments}"
@@ -556,27 +556,27 @@ async def create_event(
     visibility: Optional[str] = None,
 ) -> str:
     """
-    Creates a new event.
+    新しいイベントを作成します。
 
     Args:
-        user_google_email (str): The user's Google email address. Required.
-        summary (str): Event title.
-        start_time (str): Start time (RFC3339, e.g., "2023-10-27T10:00:00-07:00" or "2023-10-27" for all-day).
-        end_time (str): End time (RFC3339, e.g., "2023-10-27T11:00:00-07:00" or "2023-10-28" for all-day).
-        calendar_id (str): Calendar ID (default: 'primary').
-        description (Optional[str]): Event description.
-        location (Optional[str]): Event location.
-        attendees (Optional[List[str]]): Attendee email addresses.
-        timezone (Optional[str]): Timezone (e.g., "America/New_York").
-        attachments (Optional[List[str]]): List of Google Drive file URLs or IDs to attach to the event.
-        add_google_meet (bool): Whether to add a Google Meet video conference to the event. Defaults to False.
-        reminders (Optional[Union[str, List[Dict[str, Any]]]]): JSON string or list of reminder objects. Each should have 'method' ("popup" or "email") and 'minutes' (0-40320). Max 5 reminders. Example: '[{"method": "popup", "minutes": 15}]' or [{"method": "popup", "minutes": 15}]
-        use_default_reminders (bool): Whether to use calendar's default reminders. If False, uses custom reminders. Defaults to True.
-        transparency (Optional[str]): Event transparency for busy/free status. "opaque" shows as Busy (default), "transparent" shows as Available/Free. Defaults to None (uses Google Calendar default).
-        visibility (Optional[str]): Event visibility. "default" uses calendar default, "public" is visible to all, "private" is visible only to attendees, "confidential" is same as private (legacy). Defaults to None (uses Google Calendar default).
+        user_google_email (str): ユーザーのGoogleメールアドレス。必須。
+        summary (str): イベントのタイトル。
+        start_time (str): 開始時刻（RFC3339、例: "2023-10-27T10:00:00-07:00" または 終日の場合 "2023-10-27"）。
+        end_time (str): 終了時刻（RFC3339、例: "2023-10-27T11:00:00-07:00" または 終日の場合 "2023-10-28"）。
+        calendar_id (str): カレンダーID（デフォルト: 'primary'）。
+        description (Optional[str]): イベントの説明。
+        location (Optional[str]): イベントの場所。
+        attendees (Optional[List[str]]): 参加者のメールアドレス。
+        timezone (Optional[str]): タイムゾーン（例: "America/New_York"）。
+        attachments (Optional[List[str]]): イベントに添付するGoogle DriveファイルのURLまたはIDのリスト。
+        add_google_meet (bool): イベントにGoogle Meetビデオ会議を追加するかどうか。デフォルトはFalseです。
+        reminders (Optional[Union[str, List[Dict[str, Any]]]]): リマインダーオブジェクトのJSON文字列またはリスト。各オブジェクトには 'method' ("popup" または "email") と 'minutes' (0-40320) を含める必要があります。最大5つのリマインダーまで。例: '[{"method": "popup", "minutes": 15}]' または [{"method": "popup", "minutes": 15}]
+        use_default_reminders (bool): カレンダーのデフォルトリマインダーを使用するかどうか。Falseの場合、カスタムリマインダーを使用します。デフォルトはTrueです。
+        transparency (Optional[str]): 予定あり/なしステータスのイベントの透明性。"opaque" は「予定あり」（デフォルト）、"transparent" は「予定なし」として表示されます。デフォルトはNone（Googleカレンダーのデフォルトを使用）です。
+        visibility (Optional[str]): イベントの公開設定。"default" はカレンダーのデフォルトを使用、"public" は全員に公開、"private" は参加者のみに公開、"confidential" は "private" と同様（レガシー）。デフォルトはNone（Googleカレンダーのデフォルトを使用）です。
 
     Returns:
-        str: Confirmation message of the successful event creation with event link.
+        str: イベント作成成功の確認メッセージとイベントリンク。
     """
     logger.info(
         f"[create_event] Invoked. Email: '{user_google_email}', Summary: {summary}"
@@ -797,28 +797,28 @@ async def modify_event(
     color_id: Optional[str] = None,
 ) -> str:
     """
-    Modifies an existing event.
+    既存のイベントを修正します。
 
     Args:
-        user_google_email (str): The user's Google email address. Required.
-        event_id (str): The ID of the event to modify.
-        calendar_id (str): Calendar ID (default: 'primary').
-        summary (Optional[str]): New event title.
-        start_time (Optional[str]): New start time (RFC3339, e.g., "2023-10-27T10:00:00-07:00" or "2023-10-27" for all-day).
-        end_time (Optional[str]): New end time (RFC3339, e.g., "2023-10-27T11:00:00-07:00" or "2023-10-28" for all-day).
-        description (Optional[str]): New event description.
-        location (Optional[str]): New event location.
-        attendees (Optional[Union[List[str], List[Dict[str, Any]]]]): Attendees as email strings or objects with metadata. Supports: ["email@example.com"] or [{"email": "email@example.com", "responseStatus": "accepted", "organizer": true, "optional": true}]. When using objects, existing metadata (responseStatus, organizer, optional) is preserved. New attendees default to responseStatus="needsAction".
-        timezone (Optional[str]): New timezone (e.g., "America/New_York").
-        add_google_meet (Optional[bool]): Whether to add or remove Google Meet video conference. If True, adds Google Meet; if False, removes it; if None, leaves unchanged.
-        reminders (Optional[Union[str, List[Dict[str, Any]]]]): JSON string or list of reminder objects to replace existing reminders. Each should have 'method' ("popup" or "email") and 'minutes' (0-40320). Max 5 reminders. Example: '[{"method": "popup", "minutes": 15}]' or [{"method": "popup", "minutes": 15}]
-        use_default_reminders (Optional[bool]): Whether to use calendar's default reminders. If specified, overrides current reminder settings.
-        transparency (Optional[str]): Event transparency for busy/free status. "opaque" shows as Busy, "transparent" shows as Available/Free. If None, preserves existing transparency setting.
-        visibility (Optional[str]): Event visibility. "default" uses calendar default, "public" is visible to all, "private" is visible only to attendees, "confidential" is same as private (legacy). If None, preserves existing visibility setting.
-        color_id (Optional[str]): Event color ID (1-11). If None, preserves existing color.
+        user_google_email (str): ユーザーのGoogleメールアドレス。必須。
+        event_id (str): 修正するイベントのID。
+        calendar_id (str): カレンダーID（デフォルト: 'primary'）。
+        summary (Optional[str]): 新しいイベントタイトル。
+        start_time (Optional[str]): 新しい開始時刻（RFC3339、例: "2023-10-27T10:00:00-07:00" または 終日の場合 "2023-10-27"）。
+        end_time (Optional[str]): 新しい終了時刻（RFC3339、例: "2023-10-27T11:00:00-07:00" または 終日の場合 "2023-10-28"）。
+        description (Optional[str]): 新しいイベントの説明。
+        location (Optional[str]): 新しいイベントの場所。
+        attendees (Optional[Union[List[str], List[Dict[str, Any]]]]): メール文字列またはメタデータ付きオブジェクトとしての参加者。サポート形式: ["email@example.com"] または [{"email": "email@example.com", "responseStatus": "accepted", "organizer": true, "optional": true}]。オブジェクトを使用する場合、既存のメタデータ（responseStatus, organizer, optional）は保持されます。新しい参加者はデフォルトで responseStatus="needsAction" となります。
+        timezone (Optional[str]): 新しいタイムゾーン（例: "America/New_York"）。
+        add_google_meet (Optional[bool]): Google Meetビデオ会議を追加または削除するかどうか。Trueの場合、Google Meetを追加します。Falseの場合、削除します。Noneの場合、変更しません。
+        reminders (Optional[Union[str, List[Dict[str, Any]]]]): 既存のリマインダーを置き換えるリマインダーオブジェクトのJSON文字列またはリスト。各オブジェクトには 'method' ("popup" または "email") と 'minutes' (0-40320) を含める必要があります。最大5つのリマインダーまで。例: '[{"method": "popup", "minutes": 15}]' または [{"method": "popup", "minutes": 15}]
+        use_default_reminders (Optional[bool]): カレンダーのデフォルトリマインダーを使用するかどうか。指定された場合、現在のリマインダー設定を上書きします。
+        transparency (Optional[str]): 予定あり/なしステータスのイベントの透明性。"opaque" は「予定あり」、"transparent" は「予定なし」として表示されます。Noneの場合、既存の透明性設定を保持します。
+        visibility (Optional[str]): イベントの公開設定。"default" はカレンダーのデフォルトを使用、"public" は全員に公開、"private" は参加者のみに公開、"confidential" は "private" と同様（レガシー）。Noneの場合、既存の公開設定を保持します。
+        color_id (Optional[str]): イベントの色ID（1-11）。Noneの場合、既存の色を保持します。
 
     Returns:
-        str: Confirmation message of the successful event modification with event link.
+        str: イベント修正成功の確認メッセージとイベントリンク。
     """
     logger.info(
         f"[modify_event] Invoked. Email: '{user_google_email}', Event ID: {event_id}"
@@ -1024,15 +1024,15 @@ async def delete_event(
     service, user_google_email: str, event_id: str, calendar_id: str = "primary"
 ) -> str:
     """
-    Deletes an existing event.
+    既存のイベントを削除します。
 
     Args:
-        user_google_email (str): The user's Google email address. Required.
-        event_id (str): The ID of the event to delete.
-        calendar_id (str): Calendar ID (default: 'primary').
+        user_google_email (str): ユーザーのGoogleメールアドレス。必須。
+        event_id (str): 削除するイベントのID。
+        calendar_id (str): カレンダーID（デフォルト: 'primary'）。
 
     Returns:
-        str: Confirmation message of the successful event deletion.
+        str: イベント削除成功の確認メッセージ。
     """
     logger.info(
         f"[delete_event] Invoked. Email: '{user_google_email}', Event ID: {event_id}"

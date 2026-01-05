@@ -57,20 +57,20 @@ async def search_drive_files(
     corpora: Optional[str] = None,
 ) -> str:
     """
-    Searches for files and folders within a user's Google Drive, including shared drives.
+    ユーザーのGoogleドライブ（共有ドライブを含む）内のファイルやフォルダを検索します。
 
     Args:
-        user_google_email (str): The user's Google email address. Required.
-        query (str): The search query string. Supports Google Drive search operators.
-        page_size (int): The maximum number of files to return. Defaults to 10.
-        drive_id (Optional[str]): ID of the shared drive to search. If None, behavior depends on `corpora` and `include_items_from_all_drives`.
-        include_items_from_all_drives (bool): Whether shared drive items should be included in results. Defaults to True. This is effective when not specifying a `drive_id`.
-        corpora (Optional[str]): Bodies of items to query (e.g., 'user', 'domain', 'drive', 'allDrives').
-                                 If 'drive_id' is specified and 'corpora' is None, it defaults to 'drive'.
-                                 Otherwise, Drive API default behavior applies. Prefer 'user' or 'drive' over 'allDrives' for efficiency.
+        user_google_email (str): ユーザーのGoogleメールアドレス。必須。
+        query (str): 検索クエリ文字列。Google Drive検索演算子をサポートします。
+        page_size (int): 返されるファイルの最大数。デフォルトは10です。
+        drive_id (Optional[str]): 検索する共有ドライブのID。Noneの場合、動作は `corpora` と `include_items_from_all_drives` に依存します。
+        include_items_from_all_drives (bool): 共有ドライブのアイテムを結果に含めるかどうか。デフォルトはTrueです。 `drive_id` を指定しない場合に有効です。
+        corpora (Optional[str]): クエリするアイテムの範囲（例: 'user', 'domain', 'drive', 'allDrives'）。
+                                 'drive_id' が指定され、'corpora' がNoneの場合、デフォルトで 'drive' になります。
+                                 それ以外の場合はDrive APIのデフォルト動作が適用されます。効率性のために 'allDrives' よりも 'user' や 'drive' を推奨します。
 
     Returns:
-        str: A formatted list of found files/folders with their details (ID, name, type, size, modified time, link).
+        str: 見つかったファイル/フォルダのフォーマット済みリスト（ID、名前、タイプ、サイズ、更新日時、リンク）。
     """
     logger.info(
         f"[search_drive_files] Invoked. Email: '{user_google_email}', Query: '{query}'"
@@ -127,19 +127,19 @@ async def get_drive_file_content(
     file_id: str,
 ) -> str:
     """
-    Retrieves the content of a specific Google Drive file by ID, supporting files in shared drives.
+    指定されたGoogleドライブファイルのコンテンツをIDで取得し、共有ドライブ内のファイルもサポートします。
 
-    • Native Google Docs, Sheets, Slides → exported as text / CSV.
-    • Office files (.docx, .xlsx, .pptx) → unzipped & parsed with std-lib to
-      extract readable text.
-    • Any other file → downloaded; tries UTF-8 decode, else notes binary.
+    • ネイティブGoogleドキュメント、スプレッドシート、スライド → テキスト / CSVとしてエクスポートされます。
+    • Officeファイル (.docx, .xlsx, .pptx) → 解凍され、標準ライブラリを使用して解析され、
+      読み取り可能なテキストが抽出されます。
+    • その他のファイル → ダウンロードされます。UTF-8デコードを試み、失敗した場合はバイナリであることを通知します。
 
     Args:
-        user_google_email: The user’s Google email address.
-        file_id: Drive file ID.
+        user_google_email: ユーザーのGoogleメールアドレス。
+        file_id: ドライブファイルID。
 
     Returns:
-        str: The file content as plain text with metadata header.
+        str: メタデータヘッダー付きのプレーンテキストとしてのファイルコンテンツ。
     """
     logger.info(f"[get_drive_file_content] Invoked. File ID: '{file_id}'")
 
@@ -221,24 +221,24 @@ async def get_drive_file_download_url(
     export_format: Optional[str] = None,
 ) -> str:
     """
-    Gets a download URL for a Google Drive file. The file is prepared and made available via HTTP URL.
+    GoogleドライブファイルのダウンロードURLを取得します。ファイルは準備され、HTTP URL経由で利用可能になります。
 
-    For Google native files (Docs, Sheets, Slides), exports to a useful format:
-    • Google Docs → PDF (default) or DOCX if export_format='docx'
-    • Google Sheets → XLSX (default) or CSV if export_format='csv'
-    • Google Slides → PDF (default) or PPTX if export_format='pptx'
+    Googleネイティブファイル（Docs, Sheets, Slides）の場合、有用な形式にエクスポートします：
+    • Google Docs → PDF（デフォルト）または export_format='docx' の場合はDOCX
+    • Google Sheets → XLSX（デフォルト）または export_format='csv' の場合はCSV
+    • Google Slides → PDF（デフォルト）または export_format='pptx' の場合はPPTX
 
-    For other files, downloads the original file format.
+    その他のファイルの場合、元のファイル形式をダウンロードします。
 
     Args:
-        user_google_email: The user's Google email address. Required.
-        file_id: The Google Drive file ID to get a download URL for.
-        export_format: Optional export format for Google native files.
-                      Options: 'pdf', 'docx', 'xlsx', 'csv', 'pptx'.
-                      If not specified, uses sensible defaults (PDF for Docs/Slides, XLSX for Sheets).
+        user_google_email: ユーザーのGoogleメールアドレス。必須。
+        file_id: ダウンロードURLを取得するGoogleドライブファイルID。
+        export_format: Googleネイティブファイルのオプションのエクスポート形式。
+                      オプション: 'pdf', 'docx', 'xlsx', 'csv', 'pptx'。
+                      指定されない場合、適切なデフォルト（Docs/SlidesはPDF、SheetsはXLSX）を使用します。
 
     Returns:
-        str: Download URL and file metadata. The file is available at the URL for 1 hour.
+        str: ダウンロードURLとファイルメタデータ。ファイルはURLで1時間利用可能です。
     """
     logger.info(
         f"[get_drive_file_download_url] Invoked. File ID: '{file_id}', Export format: {export_format}"
@@ -398,20 +398,20 @@ async def list_drive_items(
     corpora: Optional[str] = None,
 ) -> str:
     """
-    Lists files and folders, supporting shared drives.
-    If `drive_id` is specified, lists items within that shared drive. `folder_id` is then relative to that drive (or use drive_id as folder_id for root).
-    If `drive_id` is not specified, lists items from user's "My Drive" and accessible shared drives (if `include_items_from_all_drives` is True).
+    ファイルとフォルダを一覧表示し、共有ドライブもサポートします。
+    `drive_id` が指定されている場合、その共有ドライブ内のアイテムを一覧表示します。`folder_id` はそのドライブに対する相対パスとなります（またはルートとして drive_id を folder_id として使用します）。
+    `drive_id` が指定されていない場合、ユーザーの「マイドライブ」およびアクセス可能な共有ドライブ（`include_items_from_all_drives` が True の場合）からアイテムを一覧表示します。
 
     Args:
-        user_google_email (str): The user's Google email address. Required.
-        folder_id (str): The ID of the Google Drive folder. Defaults to 'root'. For a shared drive, this can be the shared drive's ID to list its root, or a folder ID within that shared drive.
-        page_size (int): The maximum number of items to return. Defaults to 100.
-        drive_id (Optional[str]): ID of the shared drive. If provided, the listing is scoped to this drive.
-        include_items_from_all_drives (bool): Whether items from all accessible shared drives should be included if `drive_id` is not set. Defaults to True.
-        corpora (Optional[str]): Corpus to query ('user', 'drive', 'allDrives'). If `drive_id` is set and `corpora` is None, 'drive' is used. If None and no `drive_id`, API defaults apply.
+        user_google_email (str): ユーザーのGoogleメールアドレス。必須。
+        folder_id (str): GoogleドライブフォルダのID。デフォルトは 'root' です。共有ドライブの場合、これは共有ドライブのID（ルートを一覧表示する場合）か、その共有ドライブ内のフォルダIDになります。
+        page_size (int): 返されるアイテムの最大数。デフォルトは100です。
+        drive_id (Optional[str]): 共有ドライブのID。指定された場合、一覧はこのドライブにスコープされます。
+        include_items_from_all_drives (bool): `drive_id` が設定されていない場合、アクセス可能なすべての共有ドライブのアイテムを含めるかどうか。デフォルトはTrueです。
+        corpora (Optional[str]): クエリするコーパス（'user', 'drive', 'allDrives'）。`drive_id` が設定され、`corpora` がNoneの場合、'drive' が使用されます。Noneでかつ `drive_id` もない場合はAPIのデフォルトが適用されます。
 
     Returns:
-        str: A formatted list of files/folders in the specified folder.
+        str: 指定されたフォルダ内のファイル/フォルダのフォーマット済みリスト。
     """
     logger.info(
         f"[list_drive_items] Invoked. Email: '{user_google_email}', Folder ID: '{folder_id}'"
@@ -458,19 +458,19 @@ async def create_drive_file(
     fileUrl: Optional[str] = None,  # Now explicitly Optional
 ) -> str:
     """
-    Creates a new file in Google Drive, supporting creation within shared drives.
-    Accepts either direct content or a fileUrl to fetch the content from.
+    Googleドライブに新しいファイルを作成し、共有ドライブ内での作成もサポートします。
+    直接的なコンテンツ、またはコンテンツを取得するためのfileUrlのいずれかを受け入れます。
 
     Args:
-        user_google_email (str): The user's Google email address. Required.
-        file_name (str): The name for the new file.
-        content (Optional[str]): If provided, the content to write to the file.
-        folder_id (str): The ID of the parent folder. Defaults to 'root'. For shared drives, this must be a folder ID within the shared drive.
-        mime_type (str): The MIME type of the file. Defaults to 'text/plain'.
-        fileUrl (Optional[str]): If provided, fetches the file content from this URL. Supports file://, http://, and https:// protocols.
+        user_google_email (str): ユーザーのGoogleメールアドレス。必須。
+        file_name (str): 新しいファイルの名前。
+        content (Optional[str]): 指定された場合、ファイルに書き込むコンテンツ。
+        folder_id (str): 親フォルダのID。デフォルトは 'root' です。共有ドライブの場合、共有ドライブ内のフォルダIDである必要があります。
+        mime_type (str): ファイルのMIMEタイプ。デフォルトは 'text/plain' です。
+        fileUrl (Optional[str]): 指定された場合、このURLからファイルコンテンツを取得します。file://, http://, https:// プロトコルをサポートします。
 
     Returns:
-        str: Confirmation message of the successful file creation with file link.
+        str: ファイルリンクを含む、ファイル作成成功の確認メッセージ。
     """
     logger.info(
         f"[create_drive_file] Invoked. Email: '{user_google_email}', File Name: {file_name}, Folder ID: {folder_id}, fileUrl: {fileUrl}"
@@ -691,14 +691,14 @@ async def get_drive_file_permissions(
     file_id: str,
 ) -> str:
     """
-    Gets detailed metadata about a Google Drive file including sharing permissions.
+    共有権限を含むGoogleドライブファイルの詳細なメタデータを取得します。
 
     Args:
-        user_google_email (str): The user's Google email address. Required.
-        file_id (str): The ID of the file to check permissions for.
+        user_google_email (str): ユーザーのGoogleメールアドレス。必須。
+        file_id (str): 権限を確認するファイルのID。
 
     Returns:
-        str: Detailed file metadata including sharing status and URLs.
+        str: 共有ステータスとURLを含む詳細なファイルメタデータ。
     """
     logger.info(
         f"[get_drive_file_permissions] Checking file {file_id} for {user_google_email}"
@@ -800,14 +800,14 @@ async def check_drive_file_public_access(
     file_name: str,
 ) -> str:
     """
-    Searches for a file by name and checks if it has public link sharing enabled.
+    ファイル名で検索し、公開リンク共有が有効になっているかを確認します。
 
     Args:
-        user_google_email (str): The user's Google email address. Required.
-        file_name (str): The name of the file to check.
+        user_google_email (str): ユーザーのGoogleメールアドレス。必須。
+        file_name (str): 確認するファイルの名前。
 
     Returns:
-        str: Information about the file's sharing status and whether it can be used in Google Docs.
+        str: ファイルの共有ステータスと、Google Docsで使用可能かどうかに関する情報。
     """
     logger.info(f"[check_drive_file_public_access] Searching for {file_name}")
 
@@ -910,24 +910,24 @@ async def update_drive_file(
     properties: Optional[dict] = None,  # User-visible custom properties
 ) -> str:
     """
-    Updates metadata and properties of a Google Drive file.
+    Googleドライブファイルのメタデータとプロパティを更新します。
 
     Args:
-        user_google_email (str): The user's Google email address. Required.
-        file_id (str): The ID of the file to update. Required.
-        name (Optional[str]): New name for the file.
-        description (Optional[str]): New description for the file.
-        mime_type (Optional[str]): New MIME type (note: changing type may require content upload).
-        add_parents (Optional[str]): Comma-separated folder IDs to add as parents.
-        remove_parents (Optional[str]): Comma-separated folder IDs to remove from parents.
-        starred (Optional[bool]): Whether to star/unstar the file.
-        trashed (Optional[bool]): Whether to move file to/from trash.
-        writers_can_share (Optional[bool]): Whether editors can share the file.
-        copy_requires_writer_permission (Optional[bool]): Whether copying requires writer permission.
-        properties (Optional[dict]): Custom key-value properties for the file.
+        user_google_email (str): ユーザーのGoogleメールアドレス。必須。
+        file_id (str): 更新するファイルのID。必須。
+        name (Optional[str]): ファイルの新しい名前。
+        description (Optional[str]): ファイルの新しい説明。
+        mime_type (Optional[str]): 新しいMIMEタイプ（注意: タイプの変更にはコンテンツのアップロードが必要な場合があります）。
+        add_parents (Optional[str]): 親として追加するフォルダID（カンマ区切り）。
+        remove_parents (Optional[str]): 親から削除するフォルダID（カンマ区切り）。
+        starred (Optional[bool]): ファイルにスターを付ける/外すかどうか。
+        trashed (Optional[bool]): ファイルをゴミ箱に移動/ゴミ箱から戻すかどうか。
+        writers_can_share (Optional[bool]): 編集者がファイルを共有できるかどうか。
+        copy_requires_writer_permission (Optional[bool]): コピーに編集者の権限が必要かどうか。
+        properties (Optional[dict]): ファイルのカスタムキー・値プロパティ。
 
     Returns:
-        str: Confirmation message with details of the updates applied.
+        str: 適用された更新の詳細を含む確認メッセージ。
     """
     logger.info(f"[update_drive_file] Updating file {file_id} for {user_google_email}")
 
@@ -1072,14 +1072,14 @@ async def get_drive_shareable_link(
     file_id: str,
 ) -> str:
     """
-    Gets the shareable link for a Google Drive file or folder.
+    Googleドライブのファイルまたはフォルダの共有可能なリンクを取得します。
 
     Args:
-        user_google_email (str): The user's Google email address. Required.
-        file_id (str): The ID of the file or folder to get the shareable link for. Required.
+        user_google_email (str): ユーザーのGoogleメールアドレス。必須。
+        file_id (str): 共有可能なリンクを取得するファイルまたはフォルダのID。必須。
 
     Returns:
-        str: The shareable links and current sharing status.
+        str: 共有可能なリンクと現在の共有ステータス。
     """
     logger.info(
         f"[get_drive_shareable_link] Invoked. Email: '{user_google_email}', File ID: '{file_id}'"
@@ -1139,23 +1139,23 @@ async def share_drive_file(
     allow_file_discovery: Optional[bool] = None,
 ) -> str:
     """
-    Shares a Google Drive file or folder with a user, group, domain, or anyone with the link.
+    Googleドライブのファイルまたはフォルダを、ユーザー、グループ、ドメイン、またはリンクを知る全員と共有します。
 
-    When sharing a folder, all files inside inherit the permission.
+    フォルダを共有する場合、中のすべてのファイルが権限を継承します。
 
     Args:
-        user_google_email (str): The user's Google email address. Required.
-        file_id (str): The ID of the file or folder to share. Required.
-        share_with (Optional[str]): Email address (for user/group), domain name (for domain), or omit for 'anyone'.
-        role (str): Permission role - 'reader', 'commenter', or 'writer'. Defaults to 'reader'.
-        share_type (str): Type of sharing - 'user', 'group', 'domain', or 'anyone'. Defaults to 'user'.
-        send_notification (bool): Whether to send a notification email. Defaults to True.
-        email_message (Optional[str]): Custom message for the notification email.
-        expiration_time (Optional[str]): Expiration time in RFC 3339 format (e.g., "2025-01-15T00:00:00Z"). Permission auto-revokes after this time.
-        allow_file_discovery (Optional[bool]): For 'domain' or 'anyone' shares - whether the file can be found via search. Defaults to None (API default).
+        user_google_email (str): ユーザーのGoogleメールアドレス。必須。
+        file_id (str): 共有するファイルまたはフォルダのID。必須。
+        share_with (Optional[str]): メールアドレス（ユーザー/グループ用）、ドメイン名（ドメイン用）、または 'anyone' の場合は省略。
+        role (str): 権限ロール - 'reader', 'commenter', または 'writer'。デフォルトは 'reader' です。
+        share_type (str): 共有タイプ - 'user', 'group', 'domain', または 'anyone'。デフォルトは 'user' です。
+        send_notification (bool): 通知メールを送信するかどうか。デフォルトはTrueです。
+        email_message (Optional[str]): 通知メール用のカスタムメッセージ。
+        expiration_time (Optional[str]): RFC 3339形式の有効期限（例: "2025-01-15T00:00:00Z"）。この時間を過ぎると権限は自動的に取り消されます。
+        allow_file_discovery (Optional[bool]): 'domain' または 'anyone' 共有の場合 - 検索でファイルを見つけられるようにするかどうか。デフォルトはNone（APIデフォルト）。
 
     Returns:
-        str: Confirmation with permission details and shareable link.
+        str: 権限の詳細と共有可能なリンクを含む確認。
     """
     logger.info(
         f"[share_drive_file] Invoked. Email: '{user_google_email}', File ID: '{file_id}', Share with: '{share_with}', Role: '{role}', Type: '{share_type}'"
@@ -1231,28 +1231,27 @@ async def batch_share_drive_file(
     email_message: Optional[str] = None,
 ) -> str:
     """
-    Shares a Google Drive file or folder with multiple users or groups in a single operation.
+    単一の操作でGoogleドライブのファイルまたはフォルダを複数のユーザーまたはグループと共有します。
 
-    Each recipient can have a different role and optional expiration time.
+    各受信者は異なるロールとオプションの有効期限を持つことができます。
 
-    Note: Each recipient is processed sequentially. For very large recipient lists,
-    consider splitting into multiple calls.
+    注: 各受信者は順番に処理されます。受信者リストが非常に大きい場合は、複数の呼び出しに分割することを検討してください。
 
     Args:
-        user_google_email (str): The user's Google email address. Required.
-        file_id (str): The ID of the file or folder to share. Required.
-        recipients (List[Dict]): List of recipient objects. Each should have:
-            - email (str): Recipient email address. Required for 'user' or 'group' share_type.
-            - role (str): Permission role - 'reader', 'commenter', or 'writer'. Defaults to 'reader'.
-            - share_type (str, optional): 'user', 'group', or 'domain'. Defaults to 'user'.
-            - expiration_time (str, optional): Expiration in RFC 3339 format (e.g., "2025-01-15T00:00:00Z").
-            For domain shares, use 'domain' field instead of 'email':
-            - domain (str): Domain name. Required when share_type is 'domain'.
-        send_notification (bool): Whether to send notification emails. Defaults to True.
-        email_message (Optional[str]): Custom message for notification emails.
+        user_google_email (str): ユーザーのGoogleメールアドレス。必須。
+        file_id (str): 共有するファイルまたはフォルダのID。必須。
+        recipients (List[Dict]): 受信者オブジェクトのリスト。各オブジェクトには以下を含める必要があります:
+            - email (str): 受信者のメールアドレス。'user' または 'group' share_type の場合に必須。
+            - role (str): 権限ロール - 'reader', 'commenter', または 'writer'。デフォルトは 'reader' です。
+            - share_type (str, optional): 'user', 'group', または 'domain'。デフォルトは 'user' です。
+            - expiration_time (str, optional): RFC 3339形式の有効期限（例: "2025-01-15T00:00:00Z"）。
+            ドメイン共有の場合、'email' の代わりに 'domain' フィールドを使用します:
+            - domain (str): ドメイン名。share_type が 'domain' の場合に必須。
+        send_notification (bool): 通知メールを送信するかどうか。デフォルトはTrueです。
+        email_message (Optional[str]): 通知メール用のカスタムメッセージ。
 
     Returns:
-        str: Summary of created permissions with success/failure for each recipient.
+        str: 各受信者の成功/失敗を含む作成された権限の概要。
     """
     logger.info(
         f"[batch_share_drive_file] Invoked. Email: '{user_google_email}', File ID: '{file_id}', Recipients: {len(recipients)}"
@@ -1374,17 +1373,17 @@ async def update_drive_permission(
     expiration_time: Optional[str] = None,
 ) -> str:
     """
-    Updates an existing permission on a Google Drive file or folder.
+    Googleドライブのファイルまたはフォルダの既存の権限を更新します。
 
     Args:
-        user_google_email (str): The user's Google email address. Required.
-        file_id (str): The ID of the file or folder. Required.
-        permission_id (str): The ID of the permission to update (from get_drive_file_permissions). Required.
-        role (Optional[str]): New role - 'reader', 'commenter', or 'writer'. If not provided, role unchanged.
-        expiration_time (Optional[str]): Expiration time in RFC 3339 format (e.g., "2025-01-15T00:00:00Z"). Set or update when permission expires.
+        user_google_email (str): ユーザーのGoogleメールアドレス。必須。
+        file_id (str): ファイルまたはフォルダのID。必須。
+        permission_id (str): 更新する権限のID（get_drive_file_permissionsから取得）。必須。
+        role (Optional[str]): 新しいロール - 'reader', 'commenter', または 'writer'。指定されない場合、ロールは変更されません。
+        expiration_time (Optional[str]): RFC 3339形式の有効期限（例: "2025-01-15T00:00:00Z"）。権限の有効期限を設定または更新します。
 
     Returns:
-        str: Confirmation with updated permission details.
+        str: 更新された権限の詳細を含む確認。
     """
     logger.info(
         f"[update_drive_permission] Invoked. Email: '{user_google_email}', File ID: '{file_id}', Permission ID: '{permission_id}', Role: '{role}'"
@@ -1453,15 +1452,15 @@ async def remove_drive_permission(
     permission_id: str,
 ) -> str:
     """
-    Removes a permission from a Google Drive file or folder, revoking access.
+    Googleドライブのファイルまたはフォルダから権限を削除し、アクセス権を取り消します。
 
     Args:
-        user_google_email (str): The user's Google email address. Required.
-        file_id (str): The ID of the file or folder. Required.
-        permission_id (str): The ID of the permission to remove (from get_drive_file_permissions). Required.
+        user_google_email (str): ユーザーのGoogleメールアドレス。必須。
+        file_id (str): ファイルまたはフォルダのID。必須。
+        permission_id (str): 削除する権限のID（get_drive_file_permissionsから取得）。必須。
 
     Returns:
-        str: Confirmation of the removed permission.
+        str: 権限削除の確認。
     """
     logger.info(
         f"[remove_drive_permission] Invoked. Email: '{user_google_email}', File ID: '{file_id}', Permission ID: '{permission_id}'"
@@ -1500,19 +1499,19 @@ async def transfer_drive_ownership(
     move_to_new_owners_root: bool = False,
 ) -> str:
     """
-    Transfers ownership of a Google Drive file or folder to another user.
+    Googleドライブのファイルまたはフォルダの所有権を別のユーザーに転送します。
 
-    This is an irreversible operation. The current owner will become an editor.
-    Only works within the same Google Workspace domain or for personal accounts.
+    これは不可逆的な操作です。現在の所有者は編集者になります。
+    同じGoogle Workspaceドメイン内、または個人アカウント間でのみ機能します。
 
     Args:
-        user_google_email (str): The user's Google email address. Required.
-        file_id (str): The ID of the file or folder to transfer. Required.
-        new_owner_email (str): Email address of the new owner. Required.
-        move_to_new_owners_root (bool): If True, moves the file to the new owner's My Drive root. Defaults to False.
+        user_google_email (str): ユーザーのGoogleメールアドレス。必須。
+        file_id (str): 転送するファイルまたはフォルダのID。必須。
+        new_owner_email (str): 新しい所有者のメールアドレス。必須。
+        move_to_new_owners_root (bool): Trueの場合、ファイルを新しい所有者のマイドライブのルートに移動します。デフォルトはFalseです。
 
     Returns:
-        str: Confirmation of the ownership transfer.
+        str: 所有権転送の確認。
     """
     logger.info(
         f"[transfer_drive_ownership] Invoked. Email: '{user_google_email}', File ID: '{file_id}', New owner: '{new_owner_email}'"

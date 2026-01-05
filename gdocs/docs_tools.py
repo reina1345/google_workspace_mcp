@@ -59,10 +59,10 @@ async def search_docs(
     page_size: int = 10,
 ) -> str:
     """
-    Searches for Google Docs by name using Drive API (mimeType filter).
+    Drive APIを使用して名前でGoogle Docsを検索します（mimeTypeフィルタ）。
 
     Returns:
-        str: A formatted list of Google Docs matching the search query.
+        str: 検索クエリに一致するGoogle Docsのフォーマット済みリスト。
     """
     logger.info(f"[search_docs] Email={user_google_email}, Query='{query}'")
 
@@ -110,12 +110,12 @@ async def get_doc_content(
     document_id: str,
 ) -> str:
     """
-    Retrieves content of a Google Doc or a Drive file (like .docx) identified by document_id.
-    - Native Google Docs: Fetches content via Docs API.
-    - Office files (.docx, etc.) stored in Drive: Downloads via Drive API and extracts text.
+    document_idで指定されたGoogle Docまたはドライブファイル（.docxなど）のコンテンツを取得します。
+    - ネイティブGoogle Docs: Docs API経由でコンテンツを取得します。
+    - ドライブに保存されたOfficeファイル（.docxなど）: Drive API経由でダウンロードし、テキストを抽出します。
 
     Returns:
-        str: The document content with metadata header.
+        str: メタデータヘッダー付きのドキュメントコンテンツ。
     """
     logger.info(
         f"[get_doc_content] Invoked. Document/File ID: '{document_id}' for user '{user_google_email}'"
@@ -283,10 +283,10 @@ async def list_docs_in_folder(
     service: Any, user_google_email: str, folder_id: str = "root", page_size: int = 100
 ) -> str:
     """
-    Lists Google Docs within a specific Drive folder.
+    特定のドライブフォルダ内のGoogle Docsを一覧表示します。
 
     Returns:
-        str: A formatted list of Google Docs in the specified folder.
+        str: 指定されたフォルダ内のGoogle Docsのフォーマット済みリスト。
     """
     logger.info(
         f"[list_docs_in_folder] Invoked. Email: '{user_google_email}', Folder ID: '{folder_id}'"
@@ -324,10 +324,10 @@ async def create_doc(
     content: str = "",
 ) -> str:
     """
-    Creates a new Google Doc and optionally inserts initial content.
+    新しいGoogle Docを作成し、オプションで初期コンテンツを挿入します。
 
     Returns:
-        str: Confirmation message with document ID and link.
+        str: ドキュメントIDとリンクを含む確認メッセージ。
     """
     logger.info(f"[create_doc] Invoked. Email: '{user_google_email}', Title='{title}'")
 
@@ -369,24 +369,24 @@ async def modify_doc_text(
     background_color: str = None,
 ) -> str:
     """
-    Modifies text in a Google Doc - can insert/replace text and/or apply formatting in a single operation.
+    Google Doc内のテキストを変更します - テキストの挿入/置換、および/またはフォーマットの適用を単一の操作で行うことができます。
 
     Args:
-        user_google_email: User's Google email address
-        document_id: ID of the document to update
-        start_index: Start position for operation (0-based)
-        end_index: End position for text replacement/formatting (if not provided with text, text is inserted)
-        text: New text to insert or replace with (optional - can format existing text without changing it)
-        bold: Whether to make text bold (True/False/None to leave unchanged)
-        italic: Whether to make text italic (True/False/None to leave unchanged)
-        underline: Whether to underline text (True/False/None to leave unchanged)
-        font_size: Font size in points
-        font_family: Font family name (e.g., "Arial", "Times New Roman")
-        text_color: Foreground text color (#RRGGBB)
-        background_color: Background/highlight color (#RRGGBB)
+        user_google_email: ユーザーのGoogleメールアドレス
+        document_id: 更新するドキュメントのID
+        start_index: 操作の開始位置（0ベース）
+        end_index: テキスト置換/フォーマットの終了位置（テキストが挿入される場合は指定なしでも可）
+        text: 挿入または置換する新しいテキスト（オプション - 変更せずに既存のテキストをフォーマット可能）
+        bold: テキストを太字にするかどうか（True/False/Noneで変更なし）
+        italic: テキストを斜体にするかどうか（True/False/Noneで変更なし）
+        underline: テキストに下線を引くかどうか（True/False/Noneで変更なし）
+        font_size: ポイント単位のフォントサイズ
+        font_family: フォントファミリー名（例: "Arial", "Times New Roman"）
+        text_color: 前景テキスト色 (#RRGGBB)
+        background_color: 背景/ハイライト色 (#RRGGBB)
 
     Returns:
-        str: Confirmation message with operation details
+        str: 操作の詳細を含む確認メッセージ
     """
     logger.info(
         f"[modify_doc_text] Doc={document_id}, start={start_index}, end={end_index}, text={text is not None}, "
@@ -571,17 +571,17 @@ async def find_and_replace_doc(
     match_case: bool = False,
 ) -> str:
     """
-    Finds and replaces text throughout a Google Doc.
+    Google Doc全体でテキストを検索して置換します。
 
     Args:
-        user_google_email: User's Google email address
-        document_id: ID of the document to update
-        find_text: Text to search for
-        replace_text: Text to replace with
-        match_case: Whether to match case exactly
+        user_google_email: ユーザーのGoogleメールアドレス
+        document_id: 更新するドキュメントのID
+        find_text: 検索するテキスト
+        replace_text: 置換後のテキスト
+        match_case: 大文字小文字を完全に一致させるかどうか
 
     Returns:
-        str: Confirmation message with replacement count
+        str: 置換数を含む確認メッセージ
     """
     logger.info(
         f"[find_and_replace_doc] Doc={document_id}, find='{find_text}', replace='{replace_text}'"
@@ -621,20 +621,20 @@ async def insert_doc_elements(
     text: str = None,
 ) -> str:
     """
-    Inserts structural elements like tables, lists, or page breaks into a Google Doc.
+    テーブル、リスト、改ページなどの構造要素をGoogle Docに挿入します。
 
     Args:
-        user_google_email: User's Google email address
-        document_id: ID of the document to update
-        element_type: Type of element to insert ("table", "list", "page_break")
-        index: Position to insert element (0-based)
-        rows: Number of rows for table (required for table)
-        columns: Number of columns for table (required for table)
-        list_type: Type of list ("UNORDERED", "ORDERED") (required for list)
-        text: Initial text content for list items
+        user_google_email: ユーザーのGoogleメールアドレス
+        document_id: 更新するドキュメントのID
+        element_type: 挿入する要素のタイプ ("table", "list", "page_break")
+        index: 要素を挿入する位置（0ベース）
+        rows: テーブルの行数（テーブルの場合に必須）
+        columns: テーブルの列数（テーブルの場合に必須）
+        list_type: リストのタイプ ("UNORDERED", "ORDERED")（リストの場合に必須）
+        text: リスト項目の初期テキスト内容
 
     Returns:
-        str: Confirmation message with insertion details
+        str: 挿入の詳細を含む確認メッセージ
     """
     logger.info(
         f"[insert_doc_elements] Doc={document_id}, type={element_type}, index={index}"
@@ -711,18 +711,18 @@ async def insert_doc_image(
     height: int = 0,
 ) -> str:
     """
-    Inserts an image into a Google Doc from Drive or a URL.
+    ドライブまたはURLからGoogle Docに画像を挿入します。
 
     Args:
-        user_google_email: User's Google email address
-        document_id: ID of the document to update
-        image_source: Drive file ID or public image URL
-        index: Position to insert image (0-based)
-        width: Image width in points (optional)
-        height: Image height in points (optional)
+        user_google_email: ユーザーのGoogleメールアドレス
+        document_id: 更新するドキュメントのID
+        image_source: ドライブファイルIDまたは公開画像URL
+        index: 画像を挿入する位置（0ベース）
+        width: ポイント単位の画像幅（オプション）
+        height: ポイント単位の画像高さ（オプション）
 
     Returns:
-        str: Confirmation message with insertion details
+        str: 挿入の詳細を含む確認メッセージ
     """
     logger.info(
         f"[insert_doc_image] Doc={document_id}, source={image_source}, index={index}"
@@ -792,17 +792,17 @@ async def update_doc_headers_footers(
     header_footer_type: str = "DEFAULT",
 ) -> str:
     """
-    Updates headers or footers in a Google Doc.
+    Google Docのヘッダーまたはフッターを更新します。
 
     Args:
-        user_google_email: User's Google email address
-        document_id: ID of the document to update
-        section_type: Type of section to update ("header" or "footer")
-        content: Text content for the header/footer
-        header_footer_type: Type of header/footer ("DEFAULT", "FIRST_PAGE_ONLY", "EVEN_PAGE")
+        user_google_email: ユーザーのGoogleメールアドレス
+        document_id: 更新するドキュメントのID
+        section_type: 更新するセクションのタイプ ("header" または "footer")
+        content: ヘッダー/フッターのテキスト内容
+        header_footer_type: ヘッダー/フッターのタイプ ("DEFAULT", "FIRST_PAGE_ONLY", "EVEN_PAGE")
 
     Returns:
-        str: Confirmation message with update details
+        str: 更新の詳細を含む確認メッセージ
     """
     logger.info(f"[update_doc_headers_footers] Doc={document_id}, type={section_type}")
 
@@ -847,14 +847,14 @@ async def batch_update_doc(
     operations: List[Dict[str, Any]],
 ) -> str:
     """
-    Executes multiple document operations in a single atomic batch update.
+    複数のドキュメント操作を単一のアトミックなバッチ更新として実行します。
 
     Args:
-        user_google_email: User's Google email address
-        document_id: ID of the document to update
-        operations: List of operation dictionaries. Each operation should contain:
-                   - type: Operation type ('insert_text', 'delete_text', 'replace_text', 'format_text', 'insert_table', 'insert_page_break')
-                   - Additional parameters specific to each operation type
+        user_google_email: ユーザーのGoogleメールアドレス
+        document_id: 更新するドキュメントのID
+        operations: 操作辞書のリスト。各操作には以下が含まれる必要があります:
+                   - type: 操作タイプ ('insert_text', 'delete_text', 'replace_text', 'format_text', 'insert_table', 'insert_page_break')
+                   - 各操作タイプに固有の追加パラメータ
 
     Example operations:
         [
@@ -864,7 +864,7 @@ async def batch_update_doc(
         ]
 
     Returns:
-        str: Confirmation message with batch operation results
+        str: バッチ操作結果を含む確認メッセージ
     """
     logger.debug(f"[batch_update_doc] Doc={document_id}, operations={len(operations)}")
 
@@ -904,36 +904,36 @@ async def inspect_doc_structure(
     detailed: bool = False,
 ) -> str:
     """
-    Essential tool for finding safe insertion points and understanding document structure.
+    安全な挿入ポイントを見つけ、ドキュメント構造を理解するための必須ツールです。
 
-    USE THIS FOR:
-    - Finding the correct index for table insertion
-    - Understanding document layout before making changes
-    - Locating existing tables and their positions
-    - Getting document statistics and complexity info
+    使用目的:
+    - テーブル挿入のための正しいインデックスを見つける
+    - 変更を加える前にドキュメントレイアウトを理解する
+    - 既存のテーブルとその位置を特定する
+    - ドキュメントの統計情報と複雑さの情報を取得する
 
-    CRITICAL FOR TABLE OPERATIONS:
-    ALWAYS call this BEFORE creating tables to get a safe insertion index.
+    テーブル操作に重要:
+    テーブルを作成する前に、必ずこれを呼び出して安全な挿入インデックスを取得してください。
 
-    WHAT THE OUTPUT SHOWS:
-    - total_elements: Number of document elements
-    - total_length: Maximum safe index for insertion
-    - tables: Number of existing tables
-    - table_details: Position and dimensions of each table
+    出力内容:
+    - total_elements: ドキュメント要素の数
+    - total_length: 挿入のための最大安全インデックス
+    - tables: 既存のテーブル数
+    - table_details: 各テーブルの位置と寸法
 
-    WORKFLOW:
-    Step 1: Call this function
-    Step 2: Note the "total_length" value
-    Step 3: Use an index < total_length for table insertion
-    Step 4: Create your table
+    ワークフロー:
+    Step 1: この関数を呼び出す
+    Step 2: "total_length" の値をメモする
+    Step 3: テーブル挿入のために total_length 未満のインデックスを使用する
+    Step 4: テーブルを作成する
 
     Args:
-        user_google_email: User's Google email address
-        document_id: ID of the document to inspect
-        detailed: Whether to return detailed structure information
+        user_google_email: ユーザーのGoogleメールアドレス
+        document_id: 検査するドキュメントのID
+        detailed: 詳細な構造情報を返すかどうか
 
     Returns:
-        str: JSON string containing document structure and safe insertion indices
+        str: ドキュメント構造と安全な挿入インデックスを含むJSON文字列
     """
     logger.debug(f"[inspect_doc_structure] Doc={document_id}, detailed={detailed}")
 
@@ -1034,45 +1034,45 @@ async def create_table_with_data(
     bold_headers: bool = True,
 ) -> str:
     """
-    Creates a table and populates it with data in one reliable operation.
+    テーブルを作成し、データを入力する操作を確実に行います。
 
-    CRITICAL: YOU MUST CALL inspect_doc_structure FIRST TO GET THE INDEX!
+    重要: インデックスを取得するために、最初に inspect_doc_structure を呼び出す必要があります！
 
-    MANDATORY WORKFLOW - DO THESE STEPS IN ORDER:
+    必須ワークフロー - 以下の手順を順序通りに行ってください:
 
-    Step 1: ALWAYS call inspect_doc_structure first
-    Step 2: Use the 'total_length' value from inspect_doc_structure as your index
-    Step 3: Format data as 2D list: [["col1", "col2"], ["row1col1", "row1col2"]]
-    Step 4: Call this function with the correct index and data
+    Step 1: 必ず最初に inspect_doc_structure を呼び出す
+    Step 2: inspect_doc_structure の 'total_length' 値をインデックスとして使用する
+    Step 3: データを2次元リストとしてフォーマットする: [["col1", "col2"], ["row1col1", "row1col2"]]
+    Step 4: 正しいインデックスとデータでこの関数を呼び出す
 
-    EXAMPLE DATA FORMAT:
+    データフォーマット例:
     table_data = [
         ["Header1", "Header2", "Header3"],    # Row 0 - headers
         ["Data1", "Data2", "Data3"],          # Row 1 - first data row
         ["Data4", "Data5", "Data6"]           # Row 2 - second data row
     ]
 
-    CRITICAL INDEX REQUIREMENTS:
-    - NEVER use index values like 1, 2, 10 without calling inspect_doc_structure first
-    - ALWAYS get index from inspect_doc_structure 'total_length' field
-    - Index must be a valid insertion point in the document
+    重要なインデックス要件:
+    - inspect_doc_structure を呼び出さずに 1, 2, 10 などのインデックス値を使用しないでください
+    - 常に inspect_doc_structure の 'total_length' フィールドからインデックスを取得してください
+    - インデックスはドキュメント内の有効な挿入ポイントである必要があります
 
-    DATA FORMAT REQUIREMENTS:
-    - Must be 2D list of strings only
-    - Each inner list = one table row
-    - All rows MUST have same number of columns
-    - Use empty strings "" for empty cells, never None
-    - Use debug_table_structure after creation to verify results
+    データフォーマット要件:
+    - 文字列のみの2次元リストである必要があります
+    - 各内部リスト = 1つのテーブル行
+    - すべての行は同じ数の列を持つ必要があります
+    - 空のセルには空文字 "" を使用し、None は使用しないでください
+    - 作成後に debug_table_structure を使用して結果を確認してください
 
     Args:
-        user_google_email: User's Google email address
-        document_id: ID of the document to update
-        table_data: 2D list of strings - EXACT format: [["col1", "col2"], ["row1col1", "row1col2"]]
-        index: Document position (MANDATORY: get from inspect_doc_structure 'total_length')
-        bold_headers: Whether to make first row bold (default: true)
+        user_google_email: ユーザーのGoogleメールアドレス
+        document_id: 更新するドキュメントのID
+        table_data: 文字列の2次元リスト - 正確な形式: [["col1", "col2"], ["row1col1", "row1col2"]]
+        index: ドキュメントの位置（必須: inspect_doc_structure の 'total_length' から取得）
+        bold_headers: 最初の行を太字にするかどうか（デフォルト: true）
 
     Returns:
-        str: Confirmation with table details and link
+        str: テーブルの詳細とリンクを含む確認
     """
     logger.debug(f"[create_table_with_data] Doc={document_id}, index={index}")
 
@@ -1130,41 +1130,41 @@ async def debug_table_structure(
     table_index: int = 0,
 ) -> str:
     """
-    ESSENTIAL DEBUGGING TOOL - Use this whenever tables don't work as expected.
+    必須のデバッグツール - テーブルが期待通りに動作しない場合にこれを使用してください。
 
-    USE THIS IMMEDIATELY WHEN:
-    - Table population put data in wrong cells
-    - You get "table not found" errors
-    - Data appears concatenated in first cell
-    - Need to understand existing table structure
-    - Planning to use populate_existing_table
+    すぐに使用すべき状況:
+    - テーブルへのデータ入力でデータが間違ったセルに入った
+    - "table not found" エラーが発生した
+    - データが最初のセルに連結されて表示された
+    - 既存のテーブル構造を理解する必要がある
+    - populate_existing_table を使用する予定がある
 
-    WHAT THIS SHOWS YOU:
-    - Exact table dimensions (rows × columns)
-    - Each cell's position coordinates (row,col)
-    - Current content in each cell
-    - Insertion indices for each cell
-    - Table boundaries and ranges
+    表示される内容:
+    - 正確なテーブル寸法（行×列）
+    - 各セルの位置座標（行,列）
+    - 各セルの現在の内容
+    - そのセルでの新しいテキストの挿入インデックス
+    - テーブルの境界と範囲
 
-    HOW TO READ THE OUTPUT:
-    - "dimensions": "2x3" = 2 rows, 3 columns
-    - "position": "(0,0)" = first row, first column
-    - "current_content": What's actually in each cell right now
-    - "insertion_index": Where new text would be inserted in that cell
+    出力の読み方:
+    - "dimensions": "2x3" = 2行、3列
+    - "position": "(0,0)" = 最初の行、最初の列
+    - "current_content": 現在実際にそのセルにあるもの
+    - "insertion_index": そのセルに新しいテキストが挿入される場所
 
-    WORKFLOW INTEGRATION:
-    1. After creating table → Use this to verify structure
-    2. Before populating → Use this to plan your data format
-    3. After population fails → Use this to see what went wrong
-    4. When debugging → Compare your data array to actual table structure
+    ワークフロー統合:
+    1. テーブル作成後 → これを使用して構造を確認
+    2. データ入力前 → これを使用してデータフォーマットを計画
+    3. 入力失敗後 → これを使用して何が間違っていたかを確認
+    4. デバッグ時 → データ配列を実際のテーブル構造と比較
 
     Args:
-        user_google_email: User's Google email address
-        document_id: ID of the document to inspect
-        table_index: Which table to debug (0 = first table, 1 = second table, etc.)
+        user_google_email: ユーザーのGoogleメールアドレス
+        document_id: 検査するドキュメントのID
+        table_index: デバッグするテーブル（0 = 最初のテーブル、1 = 2番目のテーブルなど）
 
     Returns:
-        str: Detailed JSON structure showing table layout, cell positions, and current content
+        str: テーブルレイアウト、セル位置、および現在の内容を示す詳細なJSON構造
     """
     logger.debug(
         f"[debug_table_structure] Doc={document_id}, table_index={table_index}"
@@ -1218,16 +1218,16 @@ async def export_doc_to_pdf(
     folder_id: str = None,
 ) -> str:
     """
-    Exports a Google Doc to PDF format and saves it to Google Drive.
+    Google DocをPDF形式にエクスポートしてGoogleドライブに保存します。
 
     Args:
-        user_google_email: User's Google email address
-        document_id: ID of the Google Doc to export
-        pdf_filename: Name for the PDF file (optional - if not provided, uses original name + "_PDF")
-        folder_id: Drive folder ID to save PDF in (optional - if not provided, saves in root)
+        user_google_email: ユーザーのGoogleメールアドレス
+        document_id: エクスポートするGoogle DocのID
+        pdf_filename: PDFファイルの名前（オプション - 指定しない場合、元の名前 + "_PDF" を使用）
+        folder_id: PDFを保存するドライブフォルダID（オプション - 指定しない場合、ルートに保存）
 
     Returns:
-        str: Confirmation message with PDF file details and links
+        str: PDFファイルの詳細とリンクを含む確認メッセージ
     """
     logger.info(
         f"[export_doc_to_pdf] Email={user_google_email}, Doc={document_id}, pdf_filename={pdf_filename}, folder_id={folder_id}"

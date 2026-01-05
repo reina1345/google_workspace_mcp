@@ -516,17 +516,15 @@ async def start_google_auth(
     service_name: str, user_google_email: str = USER_GOOGLE_EMAIL
 ) -> str:
     """
-    Manually initiate Google OAuth authentication flow.
+    Google OAuth認証フローを手動で開始します。
 
-    NOTE: This tool should typically NOT be called directly. The authentication system
-    automatically handles credential checks and prompts for authentication when needed.
-    Only use this tool if:
-    1. You need to re-authenticate with different credentials
-    2. You want to proactively authenticate before using other tools
-    3. The automatic authentication flow failed and you need to retry
+    注: このツールは通常、直接呼び出す必要はありません。認証システムは、必要に応じてクレデンシャルチェックと認証プロンプトを自動的に処理します。
+    このツールは以下の場合にのみ使用してください:
+    1. 別のクレデンシャルで再認証する必要がある場合
+    2. 他のツールを使用する前に積極的に認証を行いたい場合
+    3. 自動認証フローが失敗し、再試行する必要がある場合
 
-    In most cases, simply try calling the Google Workspace tool you need - it will
-    automatically handle authentication if required.
+    ほとんどの場合、必要なGoogle Workspaceツールを呼び出すだけで、必要に応じて認証が自動的に処理されます。
     """
     if not user_google_email:
         raise ValueError("user_google_email must be provided.")

@@ -2,6 +2,16 @@
 
 ## 2026-01-05
 
+### 日本語化対応 (Localization)
+
+#### ツール説明翻訳 (Tool Descriptions)
+Google Calendar, Google Drive, Google Docs, および Core Server の全38個のMCPツールの説明文（docstrings）を日本語に翻訳しました。これにより、AIエージェントおよびユーザーがツールの機能をより正確に理解できるようになります。
+
+- **`gcalendar/calendar_tools.py`**: 全カレンダー操作ツールの説明を日本語化
+- **`gdrive/drive_tools.py`**: 全ドライブ操作ツールの説明を日本語化
+- **`gdocs/docs_tools.py`**: 全ドキュメント操作ツールの説明を日本語化
+- **`core/server.py`**: `start_google_auth` ツールの説明を日本語化
+
 ### セキュリティ・プライバシー強化
 
 #### `auth/scopes.py`
@@ -23,4 +33,4 @@
 #### `start-mcp.ps1` (新規作成)
 - 1Password連携によるセキュアな認証情報取得
 - `MCP_SINGLE_USER_MODE=1` 環境変数追加
-- Calendar/Drive のみに機能制限
+- Calendar/Drive/Docs 機能の有効化
